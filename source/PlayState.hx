@@ -245,6 +245,8 @@ class PlayState extends MusicBeatState
 	//modjam thingies
 	public var isFrozen:Bool = false;
 	public var breakoutCombo:Int = 0;
+	public var freezeSound:FlxSound;
+	public var breakoutSound:FlxSound;
 
 	// Will fire once to prevent debug spam messages and broken animations
 	private var triggeredAlready:Bool = false;
@@ -2792,6 +2794,10 @@ class PlayState extends MusicBeatState
 		FlxG.watch.addQuick("beatShit", curBeat);
 		FlxG.watch.addQuick("stepShit", curStep);
 
+		//modjam shit
+		FlxG.watch.addQuick("breakoutCombo", breakoutCombo);
+		FlxG.watch.addQuick("isFrozen", isFrozen);
+
 		if (curSong == 'Fresh')
 		{
 			switch (curBeat)
@@ -4523,11 +4529,13 @@ class PlayState extends MusicBeatState
 			dad.playAnim('cheer', true);
 		}
 
-		if (isFrozen)
+		if (isFrozen == true)
 			{
+				breakoutSound = new FlxSound().loadEmbedded(Paths.sound('breakout'));
 				if (breakoutCombo == 15)
 					{
 						isFrozen = false;
+						breakoutSound.play();
 						breakoutCombo = 0;
 						trace("NO LONGER ICY SHEEEEEEEEEEESH");
 					}
@@ -4536,18 +4544,22 @@ class PlayState extends MusicBeatState
 
 		if(curSong.toLowerCase() == 'milf')
 			{
+				freezeSound = new FlxSound().loadEmbedded(Paths.sound('freeze'));
 				switch (curStep)
 				{
 					case 5:
 						isFrozen = true;
+						freezeSound.play();
 						trace("BRRRRRR");
 					
 					case 67:
 						isFrozen = true;
+						freezeSound.play();
 						trace("BRRRRRR 2 ELECTRIC BOOGALOO");
 					
 					case 260:
 						isFrozen = true;
+						freezeSound.play();
 						trace("BRRRRR 3 FROSTBITE");
 				}
 			}
