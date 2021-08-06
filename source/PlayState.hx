@@ -242,6 +242,10 @@ class PlayState extends MusicBeatState
 	public static var timeCurrently:Float = 0;
 	public static var timeCurrentlyR:Float = 0;
 
+	//modjam thingies
+	public var isFrozen:Bool = false;
+	public var breakoutCombo:Int = 0;
+
 	// Will fire once to prevent debug spam messages and broken animations
 	private var triggeredAlready:Bool = false;
 
@@ -1620,7 +1624,7 @@ class PlayState extends MusicBeatState
 		}
 		if (keys[data])
 		{
-			trace("ur already holding " + key);
+			//trace("ur already holding " + key);
 			return;
 		}
 
@@ -2455,7 +2459,7 @@ class PlayState extends MusicBeatState
 		iconP1.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01) - iconOffset);
 		iconP2.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01)) - (iconP2.width - iconOffset);
 
-		if (health > 2)
+		if (health > 2) //HEALTH ICONS
 			health = 2;
 		if (healthBar.percent < 20)
 			iconP1.animation.curAnim.curFrame = 1;
@@ -3464,8 +3468,10 @@ class PlayState extends MusicBeatState
 				if (FlxG.save.data.accuracyMod == 0)
 					totalNotesHit += 0.75;
 			case 'sick':
-				if (health < 2)
+				if (health < 2 && !isFrozen)
 					health += 0.04;
+				if (isFrozen)
+					breakoutCombo += 1;
 				if (FlxG.save.data.accuracyMod == 0)
 					totalNotesHit += 1;
 				sicks++;
@@ -3754,7 +3760,7 @@ class PlayState extends MusicBeatState
 			{
 				if (daNote.isSustainNote && daNote.canBeHit && daNote.mustPress && holdArray[daNote.noteData] && daNote.sustainActive)
 				{
-					trace(daNote.sustainActive);
+					//trace(daNote.sustainActive);
 					goodNoteHit(daNote);
 				}
 			});
@@ -4516,6 +4522,35 @@ class PlayState extends MusicBeatState
 			boyfriend.playAnim('hey', true);
 			dad.playAnim('cheer', true);
 		}
+
+		if (isFrozen)
+			{
+				if (breakoutCombo == 15)
+					{
+						isFrozen = false;
+						breakoutCombo = 0;
+						trace("NO LONGER ICY SHEEEEEEEEEEESH");
+					}
+
+			}
+
+		if(curSong.toLowerCase() == 'milf')
+			{
+				switch (curStep)
+				{
+					case 5:
+						isFrozen = true;
+						trace("BRRRRRR");
+					
+					case 67:
+						isFrozen = true;
+						trace("BRRRRRR 2 ELECTRIC BOOGALOO");
+					
+					case 260:
+						isFrozen = true;
+						trace("BRRRRR 3 FROSTBITE");
+				}
+			}
 
 		switch (curStage)
 		{
