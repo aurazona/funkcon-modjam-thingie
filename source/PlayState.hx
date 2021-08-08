@@ -247,6 +247,7 @@ class PlayState extends MusicBeatState
 	public var breakoutCombo:Int = 0;
 	public var freezeSound:FlxSound;
 	public var breakoutSound:FlxSound;
+	public var isHype:Bool = false;
 
 	// Will fire once to prevent debug spam messages and broken animations
 	private var triggeredAlready:Bool = false;
@@ -865,6 +866,37 @@ class PlayState extends MusicBeatState
 							add(waveSprite);
 							add(waveSpriteFG);
 						 */
+					}
+				case 'brighton':
+					{
+						defaultCamZoom = 0.75;
+						curStage = 'brighton';
+						var sky:FlxSprite = new FlxSprite(-300, -100).loadGraphic(Paths.image('sky'));
+						sky.antialiasing = FlxG.save.data.antialiasing;
+						sky.scrollFactor.set(0.9, 0.9);
+						sky.active = false;
+						add(sky);
+
+						var water:FlxSprite = new FlxSprite(-300, -500).loadGraphic(Paths.image('water'));
+						water.antialiasing = FlxG.save.data.antialiasing;
+						water.scrollFactor.set(0.9, 0.9);
+						water.active = false;
+						add(water);
+
+						var fence:FlxSprite = new FlxSprite(-300, -350).loadGraphic(Paths.image('fence'));
+						fence.antialiasing = FlxG.save.data.antialiasing;
+						fence.active = false;
+						add(fence);
+
+						var floor:FlxSprite = new FlxSprite(-300,-450).loadGraphic(Paths.image('floor'));
+						floor.antialiasing = FlxG.save.data.antialiasing;
+						floor.active = false;
+						add(floor);
+
+						var stand:FlxSprite = new FlxSprite(-500,-300).loadGraphic(Paths.image('stand'));
+						stand.antialiasing = FlxG.save.data.antialiasing;
+						stand.active = false;
+						add(stand);
 					}
 				default:
 					{
@@ -2461,17 +2493,49 @@ class PlayState extends MusicBeatState
 		iconP1.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01) - iconOffset);
 		iconP2.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01)) - (iconP2.width - iconOffset);
 
-		if (health > 2) //HEALTH ICONS
-			health = 2;
-		if (healthBar.percent < 20)
-			iconP1.animation.curAnim.curFrame = 1;
+		if (SONG.song.toLowerCase() == 'sickly-sweet')
+		{
+			if (health > 2) //HEALTH ICONS
+				health = 2;
+			if (healthBar.percent < 20)
+			{
+				if (isFrozen == true)
+					iconP1.animation.curAnim.curFrame = 2;
+				else
+					iconP1.animation.curAnim.curFrame = 1;
+			}
+			else
+			{
+				if (isFrozen == true)
+					iconP1.animation.curAnim.curFrame = 2;
+				else
+					iconP1.animation.curAnim.curFrame = 0;
+			}
+			if (healthBar.percent > 80)
+			{
+				iconP2.animation.curAnim.curFrame = 1;
+			}
+			else
+			{
+				
+				iconP2.animation.curAnim.curFrame = 0;
+			}
+		
+		}
 		else
-			iconP1.animation.curAnim.curFrame = 0;
-
-		if (healthBar.percent > 80)
-			iconP2.animation.curAnim.curFrame = 1;
-		else
-			iconP2.animation.curAnim.curFrame = 0;
+		{
+			if (health > 2) //HEALTH ICONS
+				health = 2;
+			if (healthBar.percent < 20)
+				iconP1.animation.curAnim.curFrame = 1;
+			else
+				iconP1.animation.curAnim.curFrame = 0;
+	
+			if (healthBar.percent > 80)
+				iconP2.animation.curAnim.curFrame = 1;
+			else
+				iconP2.animation.curAnim.curFrame = 0;
+		}
 
 		/* if (FlxG.keys.justPressed.NINE)
 			FlxG.switchState(new Charting()); */
@@ -2797,6 +2861,7 @@ class PlayState extends MusicBeatState
 		//modjam shit
 		FlxG.watch.addQuick("breakoutCombo", breakoutCombo);
 		FlxG.watch.addQuick("isFrozen", isFrozen);
+		FlxG.watch.addQuick("isHype", isHype);
 
 		if (curSong == 'Fresh')
 		{
@@ -4047,6 +4112,7 @@ class PlayState extends MusicBeatState
 				gf.playAnim('sad');
 			}
 			combo = 0;
+			breakoutCombo = 0;
 			misses++;
 
 			if (daNote != null)
@@ -4529,40 +4595,87 @@ class PlayState extends MusicBeatState
 			dad.playAnim('cheer', true);
 		}
 
-		if (isFrozen == true)
+		if(curSong.toLowerCase() == 'sickly-sweet')
+		{
+			if (FlxG.keys.justPressed.C)
 			{
-				breakoutSound = new FlxSound().loadEmbedded(Paths.sound('breakout'));
-				if (breakoutCombo == 15)
-					{
-						isFrozen = false;
-						breakoutSound.play();
-						breakoutCombo = 0;
-						trace("NO LONGER ICY SHEEEEEEEEEEESH");
-					}
-
+				isFrozen = false;
+				breakoutCombo = 0;
+			}
+			freezeSound = new FlxSound().loadEmbedded(Paths.sound('freeze'));
+			switch (curStep)
+			{
+				case 185:
+					isFrozen = true;
+					freezeSound.play();
+					trace("BRRRRRR");
+					//step 191
+					//beat 48
+				case 309:
+					isFrozen = true;
+					freezeSound.play();
+					trace("BRRRRRR 2 ELECTRIC BOOGALOO");
+					//step 311
+					//beat 80
+				case 497:
+					isFrozen = true;
+					freezeSound.play();
+					trace("BRRRRR 3 FROSTBITE");
+					//step 511
+					//beat 128
+				case 619:
+					isFrozen = true;
+					freezeSound.play();
+					trace("BRRRRR 4 RUNNING OUT OF IDEAS HERE");
+					//step 639
+					//beat 160
+				case 771:
+					isFrozen = true;
+					freezeSound.play();
+					trace("BRRRR 5 CHILL OUT");
+					//step 800
+					//beat 200
+				case 930:
+					isFrozen = true;
+					freezeSound.play();
+					trace("BRRR 6 TRAP REMIX");
+					//step 959
+					//beat 240
+					//zoom in on chars maybe??
+				case 1302:
+					isFrozen = true;
+					freezeSound.play();
+					trace ("BRRRR 7 FINAL BRRRR");
+					//step 1343
+					//beat 336
 			}
 
-		if(curSong.toLowerCase() == 'milf')
+			switch (curStep)
 			{
-				freezeSound = new FlxSound().loadEmbedded(Paths.sound('freeze'));
-				switch (curStep)
-				{
-					case 5:
-						isFrozen = true;
-						freezeSound.play();
-						trace("BRRRRRR");
-					
-					case 67:
-						isFrozen = true;
-						freezeSound.play();
-						trace("BRRRRRR 2 ELECTRIC BOOGALOO");
-					
-					case 260:
-						isFrozen = true;
-						freezeSound.play();
-						trace("BRRRRR 3 FROSTBITE");
-				}
+				case 568:
+					//HYPE MY BOY KENNY UP
+					dad.playAnim('hypeAnim', true);
+					var dadX:Float = dad.x;
+					var dadY:Float = dad.y;
+					remove(dad);
+					dad = new Character(dadX, dadY, 'kennyhype');
+					trace ("KENNY HYPE");
+					//step 568
+				case 575:
+					isHype = true;
+					//step 575
 			}
+
+			//if (isFrozen == true)
+			breakoutSound = new FlxSound().loadEmbedded(Paths.sound('breakout'));
+			if (breakoutCombo >= 10)
+			{
+				isFrozen = false;
+				breakoutSound.play();
+				breakoutCombo = 0;
+				trace("NO LONGER ICY SHEEEEEEEEEEESH");
+			}
+		}
 
 		switch (curStage)
 		{

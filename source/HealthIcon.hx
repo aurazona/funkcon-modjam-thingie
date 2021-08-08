@@ -46,7 +46,13 @@ class HealthIcon extends FlxSprite
 			antialiasing = false
 		else
 			antialiasing = FlxG.save.data.antialiasing;
-		animation.add(char, [0, 1], 0, false, isPlayer);
+		//add if statement for boyfriend to add an extra anim for the frozen face
+		if (char == 'bf')
+			animation.add(char, [0, 1, 2], 0, false, isPlayer);
+		if (char == 'kenny')
+			animation.add(char, [0, 1, 2, 3], 0, false, isPlayer);
+		else
+			animation.add(char, [0, 1], 0, false, isPlayer);
 		animation.play(char);
 	}
 

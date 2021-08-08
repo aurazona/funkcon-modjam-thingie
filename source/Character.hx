@@ -378,6 +378,30 @@ class Character extends FlxSprite
 				loadOffsetFile(curCharacter);
 
 				playAnim('idle');
+			case 'kenny':
+				frames = Paths.getSparrowAtlas('kenny','shared',true);
+				animation.addByPrefix('idle', 'unhype idle', 24, false);
+				animation.addByPrefix('singUP', 'unhype up', 24, false);
+				animation.addByPrefix('singDOWN', 'unhype down', 24, false);
+				animation.addByPrefix('singLEFT', 'unhype left', 24, false);
+				animation.addByPrefix('singRIGHT', 'unhype right', 24, false);
+				animation.addByPrefix('idle-alt', 'hype idle', 24, false);
+				animation.addByPrefix('singUP-alt', 'hype up', 24, false);
+				animation.addByPrefix('singDOWN-alt', 'hype down', 24, false);
+				animation.addByPrefix('singLEFT-alt', 'hype left', 24, false);
+				animation.addByPrefix('singRIGHT-alt', 'hype right', 24, false);
+				animation.addByPrefix('hypeAnim', 'start hype', 24, false);
+
+				playAnim('idle');
+			case 'kennyhype':
+				frames = Paths.getSparrowAtlas('kenny','shared',true);
+				animation.addByPrefix('idle', 'hype idle', 24, false);
+				animation.addByPrefix('singUP', 'hype up', 24, false);
+				animation.addByPrefix('singDOWN', 'hype down', 24, false);
+				animation.addByPrefix('singLEFT', 'hype left', 24, false);
+				animation.addByPrefix('singRIGHT', 'hype right', 24, false);
+				animation.addByPrefix('hypeAnim', 'start hype', 24, false);
+
 		}
 
 		dance();
