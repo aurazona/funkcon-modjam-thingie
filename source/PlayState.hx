@@ -4659,6 +4659,7 @@ class PlayState extends MusicBeatState
 					var dadY:Float = dad.y;
 					remove(dad);
 					dad = new Character(dadX, dadY, 'kennyhype');
+					add(dad);
 					trace ("KENNY HYPE");
 					//step 568
 				case 575:
